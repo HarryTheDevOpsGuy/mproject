@@ -14,8 +14,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Enter Your Email ID'
+        description: 'Enter Version'
         default: 'v0.1.0'
+      command:
+        description: 'Build Command'
+        default: 'mproject -e msend:mcert --sync -tV'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,6 +34,7 @@ jobs:
         RELEASE_VERSION: ${{ github.event.inputs.version }}
         COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
         CONF_YES: 'yes'
+        BUILD_COMMAND: '${{ github.event.inputs.command }}'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
 #         EMAIL_FROM: mcloudautomation@gmail.com
 #         EMAIL_MODE: SENDGRID
@@ -46,10 +50,9 @@ jobs:
       - name: mproject clone 
         run: |
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
-          bash mproject/mproject -e msend:mcert --sync
 
       - name: make release
         run: |
-          bash mproject/mproject -e msend:mcert --sync -tV
+          bash mproject/${BUILD_COMMAND}
 
           
