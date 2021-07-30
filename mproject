@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+CHECK_MBIN="$(command -v $0)"
+if [[ ! -z ${CHECK_MBIN} && -f ${CHECK_MBIN} ]]; then
+  MBIN_PATH="$(readlink -f ${CHECK_MBIN})"
+else
+  MBIN_PATH="$(readlink -f ${0})"
+fi
+export PROJECT_ROOT="$(dirname ${MBIN_PATH})"
+MBIN="$(basename ${MBIN_PATH})"
+
+source ${PROJECT_ROOT}/runvars
+
+# Load bash functions for preliminary script operation
+for f in ${PROJECT_ROOT}/functions/main/*.sh; do
+  source "$f"
+done
+
+load_static_vars
+get_cli_args "${@}"
+if [[ ! -z ${PROJECT_NAME} && -f ${PROJECT_CONFIG_DIR}/${PROJECT_NAME}/${PROJECT_NAME}.config ]]; then
+  source ${PROJECT_CONFIG_DIR}/${PROJECT_NAME}/${PROJECT_NAME}.config
+fi
+
+# Perform backup action
+DATA=("$@")
+
+echo "test ${DATA[@]}"
+
+# Load bash functions for operating on environment
+for f in ${PROJECT_ROOT}/functions/script/*.sh; do
+  source "$f"
+done
+
+load_dynamic_vars
+
+case ${MODE} in
+  init )
+    init_project
+    ;;
+  plan )
+    echo "plan : $PROJECT_NAME | ${APP_NAME}"
+    prepare_code "${DEST_REPO_DIR}" "${DEST_REPO_URL}" "${APP_NAME}"
+    ;;
+  build )
+    code_build
+    ;;
+  deploy )
+    echo "deploy"
+    create_release_version "${DEST_REPO_DIR}" "${DEST_REPO_URL}"
+    #deploy_tiny_apps
+    ;;
+  sync )
+    log_alert "Sync From: ${SOURCE_REPO_URL}" "To: ${DEST_REPO_URL}"
+    prepare_code "${DEST_REPO_DIR}" "${DEST_REPO_URL}" "${APP_NAME}"
+    code_build
+    create_release_version "${DEST_REPO_DIR}" "${DEST_REPO_URL}"
+    #deploy_tiny_apps
+    ;;
+esac
