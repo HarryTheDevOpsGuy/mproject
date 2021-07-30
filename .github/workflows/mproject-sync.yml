@@ -40,7 +40,7 @@ jobs:
       - name: mproject 
         run: |
           eval "$(ssh-agent -s)"
-          ssh-add - <<< "${DEPLOY_KEY}"
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
           git clone git@bitbucket.org:DevOps-Expert/msend.git
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
           pwd
