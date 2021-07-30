@@ -14,3 +14,4 @@ TMP_DIR="/tmp/mproject"
 GIT_USER="Harry"
 GIT_EMAIL="mr.harry41@gmail.com"
 # Release Manager
+#GHKEY=''
