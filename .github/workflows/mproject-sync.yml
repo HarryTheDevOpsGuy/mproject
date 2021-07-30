@@ -39,8 +39,9 @@ jobs:
                   
       - name: mproject 
         run: |
-          git clone git@bitbucket.org:DevOps-Expert/msend.git
+          #git clone git@bitbucket.org:DevOps-Expert/msend.git
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
+          bash mproject/mproject -e msend:mcert --plan
           pwd
           ls -la 
           #bash mproject -e msend:mcert --plan
