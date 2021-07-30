@@ -12,6 +12,10 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Enter Your Email ID'
+        default: 'v0.1.0'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -24,7 +28,9 @@ jobs:
       env:
         SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
         GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
-        DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        RELEASE_VERSION: ${{ github.event.inputs.version }}
+        COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
+        CONF_YES: 'yes'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
 #         EMAIL_FROM: mcloudautomation@gmail.com
 #         EMAIL_MODE: SENDGRID
@@ -37,12 +43,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
                   
-      - name: mproject 
+      - name: mproject clone 
         run: |
-          #git clone git@bitbucket.org:DevOps-Expert/msend.git
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
-          bash mproject/mproject -e msend:mcert --plan
-          pwd
-          ls -la 
-          #bash mproject -e msend:mcert --plan
+          bash mproject/mproject -e msend:mcert --sync
+
+      - name: make release
+        run: |
+          bash mproject/mproject -e msend:mcert --sync -tV
+
           
