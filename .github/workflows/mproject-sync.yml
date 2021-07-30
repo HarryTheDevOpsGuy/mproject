@@ -23,6 +23,8 @@ jobs:
       image: harry97/mcloud-toolkit:latest
       env:
         SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
+        GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+        DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
 #         EMAIL_FROM: mcloudautomation@gmail.com
 #         EMAIL_MODE: SENDGRID
@@ -31,12 +33,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#       - uses: webfactory/ssh-agent@v0.5.3
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
                   
       - name: mproject 
         run: |
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "${DEPLOY_KEY}"
           git clone git@bitbucket.org:DevOps-Expert/msend.git
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
           pwd
