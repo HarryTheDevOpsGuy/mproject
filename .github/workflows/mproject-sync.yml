@@ -35,5 +35,5 @@ jobs:
       
       - name: mproject 
         run: |
-          bash mproject msend:mcert --plan
+          bash mproject -e msend:mcert --plan
           
