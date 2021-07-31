@@ -62,7 +62,11 @@ jobs:
       - name: make sync
         if : ${{ github.event.inputs.version }} == Null
         run: |
-          bash mproject/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+          pwd
+          ls -la
+          cd ${MPROJECT_DIR}
+          pwd
+          bash mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
 
           
       - name: make release
