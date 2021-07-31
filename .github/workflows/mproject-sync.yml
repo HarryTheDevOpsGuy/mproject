@@ -49,6 +49,7 @@ jobs:
 
       - name: mproject clone
         run: |
+          rm -rf mproject
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
 
       - name: make release
