@@ -35,8 +35,7 @@ jobs:
         SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
         GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
         RELEASE_VERSION: ${{ github.event.inputs.version }}
-        COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
-        # CONF_YES: 'yes'
+#         COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
         #BUILD_COMMAND: '${{ github.event.inputs.command }}'
         BUILD_COMMAND: "mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy"
         MPROJECT_DIR: '/tmp/mproject'
