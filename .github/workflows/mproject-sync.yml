@@ -15,7 +15,7 @@ on:
     inputs:
       version:
         description: 'Enter Version'
-        default: 'v0.1.0'
+#         default: 'v0.1.0'
       command:
         description: 'Build Command'
         default: 'mproject -e msend:mcert --sync -tVy'
