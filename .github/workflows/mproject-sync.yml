@@ -18,7 +18,7 @@ on:
         default: 'v0.1.0'
       command:
         description: 'Build Command'
-        default: 'mproject -e msend:mcert --sync -tV'
+        default: 'mproject -e msend:mcert --sync -tVy'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
