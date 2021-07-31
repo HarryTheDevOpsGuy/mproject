@@ -60,10 +60,12 @@ jobs:
           git checkout ${MPROJECT_BRANCH} || git checkout -b ${MPROJECT_BRANCH}
 
       - name: make sync
-        run: | 
-          bash ${BUILD_COMMAND}
+        if : ${{ github.event.inputs.version == Null }}
+        run: |
+          bash mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+
           
       - name: make release
-        if : ${{ github.event.inputs.version != Null}}
+        if : ${{ github.event.inputs.version != Null }}
         run: |
           bash mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
