@@ -35,6 +35,8 @@ jobs:
         COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
         # CONF_YES: 'yes'
         BUILD_COMMAND: '${{ github.event.inputs.command }}'
+        MPROJECT_DIR: '/tmp/mproject'
+        MPROJECT_BRANCH: 'auto-release'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
 #         EMAIL_FROM: mcloudautomation@gmail.com
 #         EMAIL_MODE: SENDGRID
@@ -54,7 +56,6 @@ jobs:
 
       - name: make release
         run: |
-          echo "CONF_YES ${CONF_YES}"
-          echo "RELEASE_VERSION ${RELEASE_VERSION}"
-          echo "COMMIT_MSG: ${COMMIT_MSG}"
+          cd ${OUTPUT_LOG_DIR}
+          git checkout ${LOG_BRANCH} || git checkout -b ${LOG_BRANCH}
           bash mproject/${BUILD_COMMAND}
