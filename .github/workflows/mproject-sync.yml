@@ -16,9 +16,12 @@ on:
       version:
         description: 'Enter Version'
 #         default: 'v0.1.0'
-      command:
-        description: 'Build Command'
-        default: 'mproject -e msend:mcert --sync -tVy'
+      appname:
+        description: 'Enter appname'
+        default: 'mweb24x7'
+#       command:
+#         description: 'Build Command'
+#         default: 'mproject -e msend:mcert --sync -tVy'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,7 +37,8 @@ jobs:
         RELEASE_VERSION: ${{ github.event.inputs.version }}
         COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
         # CONF_YES: 'yes'
-        BUILD_COMMAND: '${{ github.event.inputs.command }}'
+        #BUILD_COMMAND: '${{ github.event.inputs.command }}'
+        BUILD_COMMAND: "mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy"
         MPROJECT_DIR: '/tmp/mproject'
         MPROJECT_BRANCH: 'auto-release'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
