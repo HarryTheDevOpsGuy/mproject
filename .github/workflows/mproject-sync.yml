@@ -33,7 +33,7 @@ jobs:
         GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
         RELEASE_VERSION: ${{ github.event.inputs.version }}
         COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
-        CONF_YES: 'yes'
+        # CONF_YES: 'yes'
         BUILD_COMMAND: '${{ github.event.inputs.command }}'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
 #         EMAIL_FROM: mcloudautomation@gmail.com
