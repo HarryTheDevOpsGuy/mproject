@@ -60,16 +60,22 @@ jobs:
           git checkout ${MPROJECT_BRANCH} || git checkout -b ${MPROJECT_BRANCH}
 
       - name: make sync
-        if : ${{ github.event.inputs.version }} == Null
+        if : ${{ github.event.inputs.version }} == ""
         run: |
           pwd
           ls -la
           cd ${MPROJECT_DIR}
           pwd
-          bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+          if [[ -z ${RELEASE_VERSION} ]]; then
+            bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+          elif [[ ! -z ${RELEASE_VERSION} ]]; then
+            bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags "${RELEASE_VERSION}" -tVy
+          else
+            echo "Something went wrong"
+          fi
 
           
-      - name: make release
-        if : ${{ github.event.inputs.version }} != Null 
-        run: |
-          bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
+#       - name: make release
+#         if : ${{ github.event.inputs.version }} != Null 
+#         run: |
+#           bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
