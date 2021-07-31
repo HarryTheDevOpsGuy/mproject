@@ -38,7 +38,7 @@ jobs:
         COMMIT_MSG: 'NewBuild ${{ github.event.inputs.version }}'
         # CONF_YES: 'yes'
         #BUILD_COMMAND: '${{ github.event.inputs.command }}'
-        BUILD_COMMAND: "mproject -e msend:${{ github.event.inputs.appname }} --sync --tags '${{ github.event.inputs.version }}' -tVy"
+        BUILD_COMMAND: "mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy"
         MPROJECT_DIR: '/tmp/mproject'
         MPROJECT_BRANCH: 'auto-release'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
@@ -56,9 +56,14 @@ jobs:
       - name: mproject clone
         run: |
           git clone git@bitbucket.org:DevOps-Expert/mproject.git ${MPROJECT_DIR}
-
-      - name: make release
-        run: |
           cd ${MPROJECT_DIR}
           git checkout ${MPROJECT_BRANCH} || git checkout -b ${MPROJECT_BRANCH}
+
+      - name: make sync
+        run: | 
           bash ${BUILD_COMMAND}
+          
+      - name: make release
+        if : ${{ github.event.inputs.version != Null}}
+        run: |
+          bash mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
