@@ -66,10 +66,10 @@ jobs:
           ls -la
           cd ${MPROJECT_DIR}
           pwd
-          bash mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+          bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
 
           
       - name: make release
         if : ${{ github.event.inputs.version }} != Null 
         run: |
-          bash mproject/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
+          bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
