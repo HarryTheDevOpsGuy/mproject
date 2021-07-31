@@ -51,11 +51,10 @@ jobs:
 
       - name: mproject clone
         run: |
-          rm -rf mproject
-          git clone git@bitbucket.org:DevOps-Expert/mproject.git
+          git clone git@bitbucket.org:DevOps-Expert/mproject.git ${MPROJECT_DIR}
 
       - name: make release
         run: |
-          cd ${OUTPUT_LOG_DIR}
-          git checkout ${LOG_BRANCH} || git checkout -b ${LOG_BRANCH}
-          bash mproject/${BUILD_COMMAND}
+          cd ${MPROJECT_DIR}
+          git checkout ${MPROJECT_BRANCH} || git checkout -b ${MPROJECT_BRANCH}
+          bash ${BUILD_COMMAND}
