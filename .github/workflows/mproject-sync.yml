@@ -62,10 +62,10 @@ jobs:
       - name: make sync
         if : ${{ github.event.inputs.version }} == Null
         run: |
-          bash mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+          bash mproject/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
 
           
       - name: make release
         if : ${{ github.event.inputs.version }} != Null 
         run: |
-          bash mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
+          bash mproject/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy
