@@ -61,4 +61,4 @@ jobs:
         run: |
           cd ${MPROJECT_DIR}
           git checkout ${MPROJECT_BRANCH} || git checkout -b ${MPROJECT_BRANCH}
-          bash -x ${BUILD_COMMAND}
+          bash ${BUILD_COMMAND}
