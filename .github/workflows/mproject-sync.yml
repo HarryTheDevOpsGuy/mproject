@@ -46,13 +46,14 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  
-      - name: mproject clone 
+
+      - name: mproject clone
         run: |
           git clone git@bitbucket.org:DevOps-Expert/mproject.git
 
       - name: make release
         run: |
-          bash mproject/${BUILD_COMMAND}
-
-          
+          echo "CONF_YES ${CONF_YES}"
+          echo "RELEASE_VERSION: ${RELEASE_VERSION}"
+          echo "COMMIT_MSG: ${COMMIT_MSG}"
+          # bash mproject/${BUILD_COMMAND}
