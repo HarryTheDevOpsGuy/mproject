@@ -33,7 +33,6 @@ jobs:
         run: |
           pwd
           ls -la 
-          ls -la HarryTheDevOpsGuy/
           
       - name: Molecule converge
         uses: gofrolist/molecule-action@v2
