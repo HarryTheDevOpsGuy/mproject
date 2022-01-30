@@ -1,42 +1,61 @@
-# This is a basic workflow to help you get started with Actions
+name: Molecule pipeline test
 
-name: Ansible role test
-
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
+on: 
+  push:
+    branches-ignore:
+      - "master"
+    tags-ignore:
+      - "*"
+  pull_request:
+  pull_request_review:
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   molecule:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        # Better to use one scenario per OS for faster performance and easier debugging
         scenario:
           - centos-8
-#           - debian-10
-#           - fedora-34
-#           - oraclelinux-8
-          - ubuntu-20.04
+          - ubuntu-2004
+          - stable-ubuntu-1804
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
-          repository: "davidalger/ansible-role-nginx"
-      - name: Molecule
+          repository: davidalger/ansible-role-nginx
+
+      - name: Molecule converge
         uses: gofrolist/molecule-action@v2
         with:
-          molecule_options: --debug --base-config molecule/default/molecule.yml
-          molecule_command: test
+          molecule_options: --debug --base-config molecule/_shared/base.yml
+          molecule_command: converge
+          # Always specify scenario and don't use default for better different use cases
           molecule_args: --scenario-name ${{ matrix.scenario }}
         env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+      - name: Molecule syntax
+        uses: gofrolist/molecule-action@v2
+        with:
+          molecule_options: --debug --base-config molecule/_shared/base.yml
+          molecule_command: syntax
+          # Always specify scenario and don't use default for better different use cases
+          molecule_args: --scenario-name ${{ matrix.scenario }}
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+      - name: Molecule idempotence
+        uses: gofrolist/molecule-action@v2
+        with:
+          molecule_options: --debug --base-config molecule/_shared/base.yml
+          molecule_command: idempotence
+          # Always specify scenario and don't use default for better different use cases
+          molecule_args: --scenario-name ${{ matrix.scenario }}
+        env:
+          PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
