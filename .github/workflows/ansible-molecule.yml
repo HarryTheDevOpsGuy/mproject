@@ -32,6 +32,7 @@ jobs:
       - name: mproject test
         run: |
           pwd
+          ls -la 
           ls -la HarryTheDevOpsGuy/
           
       - name: Molecule converge
