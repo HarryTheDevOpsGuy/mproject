@@ -26,13 +26,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          #path: "${{ github.repository }}"
+          path: "${{ github.repository }}"
           repository: davidalger/ansible-role-nginx
 
       - name: mproject test
         run: |
           pwd
-          ls -la 
+          ls -la ${{ github.repository }}/
           
       - name: Molecule converge
         uses: gofrolist/molecule-action@v2
