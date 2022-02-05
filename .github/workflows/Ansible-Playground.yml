@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: mCloud Ansible Playground
+on:
+  schedule:
+    - cron:  '1 4 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      target_ip:
+        description: 'Target Server IP'
+        default: '127.0.0.1'
+      playbook:
+        description: 'Enter Playbook name'
+        default: 'lemp'
+      tags:
+        description: 'Enter your tag name'
+        default: 'create_users,openresty'
+        
+jobs:
+  mCloud-Users:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        #working-directory: /opt
+        shell: bash
+    env:
+     ANSIBLE_HOSTS: "/etc/ansible/hosts"
+     ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
+     ANSIBLE_WORKING_DIR: mcloud-users  
+             
+    steps:
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Checkout ${{ github.env.ansible_working_dir }} 
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: HarryTheDevOpsGuy/mCloud-Users
+          path: mcloud-users
+          ref: main
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: mproject clone 
+        run: |
+          env 
+          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
+          git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
+          
+      - name: Run ansible playbook
+        working-directory: mcloud-users
+        run: |
+           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
+           #ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" local.yml
+           ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" ${{ github.event.inputs.playbook }}.yml -t "${{ github.event.inputs.tags }}"
