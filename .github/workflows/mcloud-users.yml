@@ -19,7 +19,8 @@ jobs:
         
     container:
       image: harry97/mcloud-toolkit:latest
-#       env:
+      env:
+       ANSIBLE_ROLES_PATH: ${{ github.workspace }}/mcloud-ansible/playbook/roles:~/.ansible/roles
 #         ## Slack variables
 #         SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
 #         MT_0001_SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
@@ -62,6 +63,7 @@ jobs:
           
       - name: Playground
         run: |
+          env
           pwd
           ls -la
           echo "workspace : ${GITHUB_WORKSPACE}"
@@ -71,9 +73,10 @@ jobs:
        
       - name: Run ansible playbook
         run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
+          #export ANSIBLE_HOST_KEY_CHECKING=False
           export ANSIBLE_ROLES_PATH="${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles"
           ls -la ${GITHUB_WORKSPACE}/mcloud-ansible
+          ANSIBLE_HOST_KEY_CHECKING=False \
           ansible-pull --clean \
             -d ${GITHUB_WORKSPACE}/mcloud-ansible \
             -U git@bitbucket.org:devopsexpert/mcloud-ansible.git \
