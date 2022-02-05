@@ -75,7 +75,7 @@ jobs:
       - name: Run ansible playbook
         working-directory: mcloud-users
         run: |
-           ansible-galaxy install -r mcloud-ansible/playbook/requirements.yml
+           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
            ansible-playbook \
              -i inventory/hosts_mcloud \
              -e "target_host=${{ github.event.inputs.target_ip }}" \
