@@ -77,5 +77,6 @@ jobs:
         run: |
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
            ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" local.yml
+           ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" lemp.yml
 
        
