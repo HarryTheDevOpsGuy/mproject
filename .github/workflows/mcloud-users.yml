@@ -67,7 +67,7 @@ jobs:
           pwd
           ls -la
           echo "==================="
-          echo "workspace : ${GITHUB_WORKSPACE} == ${{ GITHUB_WORKSPACE }}"
+          echo "workspace : ${GITHUB_WORKSPACE} == ${{GITHUB_WORKSPACE}}"
           echo "GITHUB_ENV: ${GITHUB_ENV}" 
           ansible --version
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
