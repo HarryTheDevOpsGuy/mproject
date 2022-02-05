@@ -67,7 +67,6 @@ jobs:
           env
           pwd
           ls -la
-          echo ${{ jobs.mCloud-Users.container.env }}
           echo "==================="
           echo "workspace : ${GITHUB_WORKSPACE} == ${{ github.GITHUB_WORKSPACE }}: ${{ github.env.GITHUB_WORKSPACE }}"
           echo "GITHUB_ENV: ${GITHUB_ENV} : ${{ jobs.mCloud-Users.container.env.ANSIBLE_WORKING_DIR }}
