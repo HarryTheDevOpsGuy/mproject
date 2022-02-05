@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           repository: HarryTheDevOpsGuy/mCloud-Users
-          path: ${{ GITHUB_WORKSPACE }}/mCloud-Users
+          path: ${{ GITHUB_WORKSPACE }}/mcloud-users
           #ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Playground
@@ -65,9 +65,10 @@ jobs:
        
       - name: Run ansible playbook
         run: |  
-          export ANSIBLE_ROLES_PATH="${workdir}/mcloud-ansible/playbook/roles:~/.ansible/roles"
+          export 
+          export ANSIBLE_ROLES_PATH="${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles"
           ansible-pull --clean \
-            -d ${workdir}/mcloud-ansible \
-            -U https://DevOps-Expert${BBP}@bitbucket.org/devopsexpert/mcloud-ansible.git \
-            -e"@${bootstrap_vars}" playbook/local.yml
+            -d ${GITHUB_WORKSPACE}/mcloud-ansible \
+            -U git@bitbucket.org:devopsexpert/mcloud-ansible.git \
+            playbook/local.yml
        
