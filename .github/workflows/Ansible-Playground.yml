@@ -17,7 +17,7 @@ on:
         default: 'lemp'
       tags:
         description: 'Enter your tag name'
-        default: 'create_users,openresty'
+        default: 'base,create_users,openresty'
         
 jobs:
   mCloud-Ansible-Playground:
@@ -67,6 +67,5 @@ jobs:
            ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" -t "${{ github.event.inputs.tags }}" ${{ github.event.inputs.playbook }}.yml
 
            hostname
-           mwatcher -e 'harrythedevopsguy@gmail.com' -r 0
 
            
