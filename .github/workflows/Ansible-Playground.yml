@@ -40,7 +40,15 @@ jobs:
           path: mcloud-users
           ref: main
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+  
+      - name: info 
+        run: |
+          env 
+          hostname
+          curl ifconfig.me
+          free -h 
+          mwatcher -s '#devops'
+         
       - name: mproject clone 
         run: |
           env 
