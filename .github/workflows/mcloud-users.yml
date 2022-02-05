@@ -65,7 +65,6 @@ jobs:
        
       - name: Run ansible playbook
         run: |  
-          export 
           export ANSIBLE_ROLES_PATH="${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles"
           ansible-pull --clean \
             -d ${GITHUB_WORKSPACE}/mcloud-ansible \
