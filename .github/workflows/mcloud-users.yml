@@ -55,6 +55,10 @@ jobs:
           ref: main
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
+      - name: mproject clone
+        run: |
+          git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
+          
       - name: Playground
         run: |
           pwd
@@ -68,8 +72,6 @@ jobs:
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
           export ANSIBLE_ROLES_PATH="${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles"
-          ansible-pull --clean \
-            -d ${GITHUB_WORKSPACE}/mcloud-ansible \
-            -U git@bitbucket.org:devopsexpert/mcloud-ansible.git \
-            playbook/local.yml
+          ls -la ${GITHUB_WORKSPACE}/mcloud-ansible
+
        
