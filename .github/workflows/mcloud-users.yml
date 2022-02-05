@@ -67,7 +67,7 @@ jobs:
           pwd
           ls -la
           echo "==================="
-          echo "workspace : ${GITHUB_WORKSPACE} == ${{ env.GITHUB_WORKSPACE }}"
+          echo "workspace : ${GITHUB_WORKSPACE} == ${{ GITHUB_WORKSPACE }}"
           echo "GITHUB_ENV: ${GITHUB_ENV}" 
           ansible --version
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
@@ -75,6 +75,7 @@ jobs:
       - name: Run ansible playbook
         working-directory: mcloud-users
         run: |
+           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/requirements.yml
            ansible-playbook \
              -i inventory/hosts_mcloud \
              -e "target_host=${{ github.event.inputs.target_ip }}" \
