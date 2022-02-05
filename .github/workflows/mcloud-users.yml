@@ -65,7 +65,8 @@ jobs:
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
        
       - name: Run ansible playbook
-        run: |  
+        run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
           export ANSIBLE_ROLES_PATH="${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles"
           ansible-pull --clean \
             -d ${GITHUB_WORKSPACE}/mcloud-ansible \
