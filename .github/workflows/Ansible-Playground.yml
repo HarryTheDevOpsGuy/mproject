@@ -6,7 +6,10 @@ on:
     - cron:  '1 4 * * 1-5'
   workflow_dispatch:
     inputs:
-      target_ip:
+      project_name:
+        description: 'Your Project Name'
+        default: 'mcloud'
+      target_host:
         description: 'Target Server IP'
         default: '127.0.0.1'
       playbook:
@@ -49,10 +52,10 @@ jobs:
           free -h
           df -h
           ansible --version
+          crontab -l
          
       - name: mproject clone 
         run: |
-          env 
           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
           
@@ -60,5 +63,9 @@ jobs:
         working-directory: mcloud-users
         run: |
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
-           #ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" local.yml
-           ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" ${{ github.event.inputs.playbook }}.yml -t "${{ github.event.inputs.tags }}"
+           #ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" local.yml
+           ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" -t "${{ github.event.inputs.tags }}" ${{ github.event.inputs.playbook }}.yml
+           crontab -l 
+           hostname
+
+           
