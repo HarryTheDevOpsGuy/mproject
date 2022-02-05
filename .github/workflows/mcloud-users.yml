@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           repository: HarryTheDevOpsGuy/mCloud-Users
-          path: ${{ env.ANSIBLE_WORKING_DIR }}
+          path: ${env.ANSIBLE_WORKING_DIR}
           ref: main
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
@@ -76,7 +76,7 @@ jobs:
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
            ansible-playbook \
-             -i ${{ env.ANSIBLE_WORKING_DIR }}/inventory/hosts_mcloud \
+             -i ${ANSIBLE_WORKING_DIR}/inventory/hosts_mcloud \
              -e 'target_host=127.0.0.1' \
              local.yml
 
