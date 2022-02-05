@@ -17,7 +17,7 @@ on:
         default: 'create_users,openresty'
         
 jobs:
-  mCloud-Users:
+  mCloud-Ansible-Playground:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -46,8 +46,8 @@ jobs:
           env 
           hostname
           curl ifconfig.me
-          free -h 
-          mwatcher -s '#devops'
+          free -h
+          df -h
          
       - name: mproject clone 
         run: |
