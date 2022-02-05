@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           repository: HarryTheDevOpsGuy/mCloud-Users
-          path: ${env.ANSIBLE_WORKING_DIR}
+          path: ${{ github.env.ANSIBLE_WORKING_DIR }}
           ref: main
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
@@ -73,10 +73,10 @@ jobs:
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
        
       - name: Run ansible playbook
-        working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
+        working-directory: ${{ github.env.ANSIBLE_WORKING_DIR }}
         run: |
            ansible-playbook \
-             -i ${ANSIBLE_WORKING_DIR}/inventory/hosts_mcloud \
+             -i inventory/hosts_mcloud \
              -e 'target_host=127.0.0.1' \
              local.yml
 
