@@ -74,5 +74,9 @@ jobs:
           export ANSIBLE_HOST_KEY_CHECKING=False
           export ANSIBLE_ROLES_PATH="${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles"
           ls -la ${GITHUB_WORKSPACE}/mcloud-ansible
+          ansible-pull --clean \
+            -d ${GITHUB_WORKSPACE}/mcloud-ansible \
+            -U git@bitbucket.org:devopsexpert/mcloud-ansible.git \
+            playbook/local.yml -t base
 
        
