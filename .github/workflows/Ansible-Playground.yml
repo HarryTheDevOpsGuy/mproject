@@ -48,6 +48,7 @@ jobs:
           curl ifconfig.me
           free -h
           df -h
+          ansible --version
          
       - name: mproject clone 
         run: |
