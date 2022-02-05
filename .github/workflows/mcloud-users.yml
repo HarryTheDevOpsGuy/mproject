@@ -43,9 +43,20 @@ jobs:
 #         #USERID: msite_001       
 
     steps:
-      # Check SSL certs
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: HarryTheDevOpsGuy/mCloud-Users
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Check SSL Certificate Status
         run: |
+          pwd
+          ls -la
           ansible --version
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
        
