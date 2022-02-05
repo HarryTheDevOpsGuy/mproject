@@ -69,13 +69,13 @@ jobs:
           ls -la
           echo ${{ github.env }}
           echo "==================="
-          echo "workspace : ${GITHUB_WORKSPACE} : ${{ github.env.ANSIBLE_WORKING_DIR }}"
+          echo "workspace : ${GITHUB_WORKSPACE} == ${{ github.workspace }} : ${{ github.env.ANSIBLE_WORKING_DIR }}"
           echo "GITHUB_ENV: ${GITHUB_ENV}"
           ansible --version
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
        
       - name: Run ansible playbook
-        working-directory: mcloud-users
+        working-directory: ${{ github.workspace }}/mcloud-users
         run: |
            ansible-playbook \
              -i inventory/hosts_mcloud \
