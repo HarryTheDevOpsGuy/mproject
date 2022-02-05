@@ -1,0 +1,51 @@
+# This is a basic workflow to help you get started with Actions
+
+name: mCloud User - Manage Linux Bulk User Smartly
+on:
+  schedule:
+    - cron:  '1 4 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      target_ip:
+        description: 'Target Server IP'
+        default: '127.0.0.1'
+jobs:
+  mCloud-Users:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /opt
+        shell: bash
+        
+    container:
+      image: harry97/mcloud-toolkit:latest
+#       env:
+#         ## Slack variables
+#         SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
+#         MT_0001_SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
+#          ## mSend variables
+#         DISABLE_COLOR: 'true'
+#         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
+#         EMAIL_FROM: mcloudautomation@gmail.com
+#         EMAIL_MODE: SENDGRID
+#         REPLY_EMAIL_ADDRESS: 'Harry <HarryTheDevOpsGuy@gmail.com>'
+#         # mCert variables
+#         # for Debug only
+#         EMAIL_NOTIFICATION: 'true'
+#         FORCE_EMAIL_TO: ${{ github.event.inputs.force_email }}
+#         # TO read 1-10 raws from gsheet.
+#         LINE_RANGE: "1,10p"
+#         GOOGLE_SHEET: ${{ secrets.DEFAULT_GOOGLE_SHEET }} 
+#         #SLACK_ALERT_REPEAT_INTERVAL: '120'
+#         #EMAIL_ALERT_REPEAT_INTERVAL: '180'
+#         #LOOP_REPEAT_INTERVAL: '10'
+#         OUTPUT_LOG_DIR: '/tmp/logdata'
+#         #USERID: msite_001       
+
+    steps:
+      # Check SSL certs
+      - name: Check SSL Certificate Status
+        run: |
+          ansible --version
+          # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
+       
