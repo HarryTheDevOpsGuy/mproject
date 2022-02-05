@@ -75,7 +75,7 @@ jobs:
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
        
       - name: Run ansible playbook
-        working-directory: ${{ github.env.ANSIBLE_WORKING_DIR }}
+        working-directory: mcloud-users
         run: |
            ansible-playbook \
              -i inventory/hosts_mcloud \
