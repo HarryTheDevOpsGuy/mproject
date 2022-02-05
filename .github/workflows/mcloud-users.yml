@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /opt
+        #working-directory: /opt
         shell: bash
         
     container:
@@ -53,10 +53,12 @@ jobs:
           repository: HarryTheDevOpsGuy/mCloud-Users
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Check SSL Certificate Status
+      - name: Playground
         run: |
           pwd
           ls -la
+          echo "workspace : ${GITHUB_WORKSPACE}"
+          echo "GITHUB_ENV: ${GITHUB_ENV}"
           ansible --version
           # mcert -V | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
        
