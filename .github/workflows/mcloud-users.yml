@@ -20,7 +20,7 @@ jobs:
     container:
       image: harry97/mcloud-toolkit:latest
       env:
-       ANSIBLE_ROLES_PATH: ${{ env.GITHUB_WORKSPACE }}/mcloud-ansible/playbook/roles:~/.ansible/roles
+       ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
        ANSIBLE_WORKING_DIR: mcloud-users
 #         ## Slack variables
 #         SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
           ref: main
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
-      - name: mproject clone
+      - name: mproject clone 
         run: |
           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
