@@ -9,6 +9,13 @@ on:
       target_ip:
         description: 'Target Server IP'
         default: '127.0.0.1'
+      playbook:
+        description: 'Enter Playbook name'
+        default: 'users'
+      tags:
+        description: 'Enter your tag name'
+        default: 'create_users,openresty'
+        
 jobs:
   mCloud-Users:
     runs-on: ubuntu-latest
@@ -76,7 +83,7 @@ jobs:
         working-directory: mcloud-users
         run: |
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
-           ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" local.yml
-           ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" lemp.yml
+           #ansible-playbook -e "target_host=${{ github.event.inputs.target_ip }}" local.yml
+           ansible-playbook -i inventory/hosts_mcloud -e "target_host=${{ github.event.inputs.target_ip }}" ${{ github.event.inputs.playbook }}.yml -t "${{ github.event.inputs.tags }}"
 
        
