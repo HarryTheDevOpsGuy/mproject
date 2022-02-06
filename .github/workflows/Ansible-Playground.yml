@@ -58,7 +58,11 @@ jobs:
         run: |
           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
-          
+     
+      - name: ansible-lint
+        uses: ansible/ansible-lint-action@v4.1.0.post0
+
+     
       - name: Run ansible playbook
         working-directory: mcloud-users
         run: |
