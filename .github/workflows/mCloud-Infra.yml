@@ -57,21 +57,15 @@ jobs:
   
       - name: info 
         run: |
-          hostname
-          hostname -I
-          curl ifconfig.me
-          free -h
-          df -h
           ansible --version
           /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
-          sudo curl -L https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
+          sudo curl -sL https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
           sudo chmod +x /usr/bin/mslack
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
-          env
           
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
