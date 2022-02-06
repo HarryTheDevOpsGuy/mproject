@@ -37,6 +37,7 @@ jobs:
      #ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
      ANSIBLE_PLAYBOOK: lemp.yml
      ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
+     SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
      
              
     steps:
@@ -60,96 +61,16 @@ jobs:
           free -h
           df -h
           ansible --version
-          /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable 
+          /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
+          curl -sL "https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack" -o ${SLACK_BIN:-/usr/bin/mslack}
+          chmod +x ${SLACK_BIN:-/usr/bin/mslack}
+          apt-get install -y jq
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
           
-
-      - name: Post to a Slack channel
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # Slack channel id, channel name, or user id to post message.
-          # See also: https://api.slack.com/methods/chat.postMessage#channels
-          channel-id: 'CUE4NTB0X'
-          # For posting a simple plain text message
-          #slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\n Ansible Command : `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Hi Harry,\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Workflow:* `${{ github.workflow }}`"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Build by:* `${{ github.actor }}`"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Build No:* `${{ github.run_number }}`"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Environment :* `${{ env.TARGET_HOST }}`"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Playbook :* `${{ env.ANSIBLE_PLAYBOOK }}`"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Args :* `${{ env.ANSIBLE_OPTIONS }}`"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Action Ref:* `${{ github.action_ref }}`"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "emoji": true,
-                        "text": "Approve"
-                      },
-                      "style": "primary",
-                      "value": "click_me_123"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "emoji": true,
-                        "text": "Deny"
-                      },
-                      "style": "danger",
-                      "value": "click_me_123"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
-
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
@@ -160,4 +81,4 @@ jobs:
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
            ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
-           hostname
+           hostname | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
