@@ -29,7 +29,7 @@ jobs:
      GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
      ANSIBLE_HOSTS: "/etc/ansible/hosts"
      ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
-     ANSIBLE_WORKING_DIR: mcloud-infra
+     ANSIBLE_WORKING_DIR: mcloud-infra/ansible
      ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
      TARGET_HOST: ${{ github.event.inputs.project_name }}_${{ github.event.inputs.environment }}
      ANSIBLE_PLAYBOOK: lemp.yml
