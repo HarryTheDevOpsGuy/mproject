@@ -58,14 +58,7 @@ jobs:
         run: |
           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
-     
-      - name: ansible-lint
-        uses: ansible/ansible-lint-action@v4.1.0.post0
-        with:
-         targets: "*.yml"
-#          args: ""
-
-     
+          
       - name: Run ansible playbook
         working-directory: mcloud-users
         run: |
@@ -74,5 +67,11 @@ jobs:
            ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" -t "${{ github.event.inputs.tags }}" ${{ github.event.inputs.playbook }}.yml
 
            hostname
+           
+      - name: ansible-lint
+        uses: ansible/ansible-lint-action@v4.1.0.post0
+        with:
+         targets: "*.yml"
+#          args: ""
 
            
