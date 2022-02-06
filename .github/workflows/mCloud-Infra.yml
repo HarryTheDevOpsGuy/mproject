@@ -39,6 +39,7 @@ jobs:
      ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
      SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
      SLACK_CHANNEL: '#devops'
+     ANSIBLE_LOG_FOLDER: ${GITHUB_WORKSPACE}/ansible
      
              
     steps:
@@ -85,4 +86,5 @@ jobs:
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
            ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
+           cat /tmp/ansible.log
            hostname | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
