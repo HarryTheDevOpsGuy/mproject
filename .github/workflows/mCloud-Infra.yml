@@ -78,14 +78,63 @@ jobs:
           #slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\n Ansible Command : `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
           payload: |
             {
-              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Hi Harry, GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    "text": "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
                   }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Type:*\nComputer (laptop)"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*When:*\nSubmitted Aut 10"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Last Update:*\nMar 10, 2015 (3 years, 5 months)"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Reason:*\nAll vowel keys aren't working."
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Specs:*\n\"Cheetah Pro 15\" - Fast, really fast\""
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "Approve"
+                      },
+                      "style": "primary",
+                      "value": "click_me_123"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "Deny"
+                      },
+                      "style": "danger",
+                      "value": "click_me_123"
+                    }
+                  ]
                 }
               ]
             }
