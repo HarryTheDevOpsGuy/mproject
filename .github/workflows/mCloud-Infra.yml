@@ -70,6 +70,7 @@ jobs:
         run: |
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
+          env
           
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
