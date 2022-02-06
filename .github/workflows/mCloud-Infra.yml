@@ -84,7 +84,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Hi Harry,\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
+                    "text": "Hi Harry,\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*\n *Command:* `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
                   }
                 },
                 {
