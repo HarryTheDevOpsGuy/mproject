@@ -2,8 +2,8 @@
 
 name: mCloud Ansible Playground
 on:
-  schedule:
-    - cron:  '1 4 * * 1-5'
+#   schedule:
+#     - cron:  '1 4 * * 1-5'
   workflow_dispatch:
     inputs:
       project_name:
