@@ -62,9 +62,9 @@ jobs:
           df -h
           ansible --version
           /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
-          curl -sL "https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack" -o /usr/bin/mslack
+          curl -L https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
           chmod +x /usr/bin/mslack
-          apt-get install -y jq
+          #apt-get install -y jq
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
