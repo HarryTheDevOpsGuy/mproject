@@ -59,7 +59,7 @@ jobs:
           free -h
           df -h
           ansible --version
-          pip install prettytable
+          pip3 install prettytable
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
