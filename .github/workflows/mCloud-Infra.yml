@@ -11,9 +11,9 @@ on:
       environment:
         description: 'Project env'
         default: 'dev'
-      playbook:
-        description: 'Enter Playbook name'
-        default: 'lemp'
+#       playbook:
+#         description: 'Enter Playbook name'
+#         default: 'lemp'
       options:
         description: 'Provide you ansible options'
         default: '-t base,user_mgmt -CD'
@@ -34,7 +34,8 @@ jobs:
      ANSIBLE_WORKING_DIR: mcloud-infra/ansible
      ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
      TARGET_HOST: ${{ github.event.inputs.project_name }}_${{ github.event.inputs.environment }}
-     ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
+     #ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
+     ANSIBLE_PLAYBOOK: lemp.yml
      ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
      
              
