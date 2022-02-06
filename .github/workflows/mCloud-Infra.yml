@@ -32,7 +32,7 @@ jobs:
      ANSIBLE_WORKING_DIR: mcloud-infra/ansible
      ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
      TARGET_HOST: ${{ github.event.inputs.project_name }}_${{ github.event.inputs.environment }}
-     ANSIBLE_PLAYBOOK: lemp.yml
+     ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
              
     steps:
       - uses: webfactory/ssh-agent@v0.5.3
