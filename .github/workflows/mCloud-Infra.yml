@@ -19,7 +19,7 @@ on:
         default: 'base,create_users,openresty'
         
 jobs:
-  mCloud-Ansible-Playground:
+  mCloud-Infra:
     runs-on: ubuntu-latest
     defaults:
       run:
