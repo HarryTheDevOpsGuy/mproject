@@ -60,7 +60,7 @@ jobs:
           df -h
           ansible --version
           pip3 install prettytable
-          pip install prettytable
+          /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable 
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
@@ -73,5 +73,5 @@ jobs:
            [[ -f "${ANSIBLE_INVENTORY}" ]] || export ANSIBLE_INVENTORY="/etc/ansible/hosts"
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
-           #ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
+           ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            hostname
