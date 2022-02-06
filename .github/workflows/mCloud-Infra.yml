@@ -75,7 +75,20 @@ jobs:
           # See also: https://api.slack.com/methods/chat.postMessage#channels
           channel-id: 'CUE4NTB0X'
           # For posting a simple plain text message
-          slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\n Ansible Command : `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
+          #slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\n Ansible Command : `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
 
