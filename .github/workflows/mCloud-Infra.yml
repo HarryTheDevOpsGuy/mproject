@@ -67,14 +67,6 @@ jobs:
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
           
-      - name: action-slack
-        uses: 8398a7/action-slack@v3.12.0
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
-        if: always() # Pick up events even if the job fails or is canceled.
 
       - name: Post to a Slack channel
         id: slack
@@ -92,7 +84,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
+                    "text": "Hi Harry,:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
                   }
                 },
                 {
@@ -100,23 +92,23 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Type:*\nComputer (laptop)"
+                      "text": "*Workflow:*\n${{ github.workflow }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*When:*\nSubmitted Aut 10"
+                      "text": "*Build by:*\n${{ github.actor }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Last Update:*\nMar 10, 2015 (3 years, 5 months)"
+                      "text": "*Build No:*\n${{ github.run_number }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Reason:*\nAll vowel keys aren't working."
+                      "text": "*Environment :*\n${{ env.TARGET_HOST }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Specs:*\n\"Cheetah Pro 15\" - Fast, really fast\""
+                      "text": "*Commands:*\nansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}"
                     }
                   ]
                 },
