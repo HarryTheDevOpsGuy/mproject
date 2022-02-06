@@ -74,7 +74,7 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.DEFAULT_SLACK_TOKEN }}
           slack-channel: CUE4NTB0X
           slack-optional-icon_emoji: ":fire:"
-          slack-optional-as_user: false
+          #slack-optional-as_user: false
           slack-text: Hello! Event "${{ github.event_name }}" in "${{ github.repository }}" 🤓 \n ansible-playbook -u harry -e "target_host=${env.TARGET_HOST} ${{ env.ANSIBLE_EXTRA_VARS }}" "${{ env.ANSIBLE_OPTIONS }}" ${{ env.ANSIBLE_PLAYBOOK }}
           
       - name: Result from "Send Message"
