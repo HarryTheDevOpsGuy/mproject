@@ -79,11 +79,10 @@ jobs:
            if [[ ! -f ${ANSIBLE_INVENTORY} ]]; then
              export ANSIBLE_INVENTORY="/etc/ansible/hosts"
              export TARGET_HOST="127.0.0.1"
-           fi
-           
+           fi 
            build_url=https://github.com/HarryTheDevOpsGuy/mproject/actions/runs/${{ github.run_id }}
-           mslack chat send --title "${GITHUB_RUN_NUMBER} - Pipeline -> <${build_url}|${GITHUB_JOB}> Triggered By ${{ github.actor }}" --text "*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
+           mslack chat send --title "${GITHUB_RUN_NUMBER} - Started Pipeline -> <${build_url}|${GITHUB_JOB}> By ${{ github.actor }}" --text "*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
            ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK} | tee /tmp/ansible.out
-           netstat -ntulp | mslack file upload --title "${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --comment "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --filter '.file.url_private' --channels '#devops'
+         
