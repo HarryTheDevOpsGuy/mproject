@@ -38,6 +38,7 @@ jobs:
      ANSIBLE_PLAYBOOK: lemp.yml
      ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
      SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
+     SLACK_CHANNEL: '#devops'
      
              
     steps:
@@ -64,7 +65,6 @@ jobs:
           /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
           sudo curl -L https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
           sudo chmod +x /usr/bin/mslack
-          sudo apt-get install -y jq
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
@@ -77,7 +77,8 @@ jobs:
            if [[ ! -f ${ANSIBLE_INVENTORY} ]]; then
              export ANSIBLE_INVENTORY="/etc/ansible/hosts"
              export TARGET_HOST="127.0.0.1"
-           fi     
+           fi
+           mslack chat send --title "Executed Pipeline ${GITHUB_JOB}_${GITHUB_RUN_NUMBER}" --text "\`$GITHUB_RUN_NUMBER\`| \`$GITHUB_WORKFLOW\` | \`$GITHUB_JOB\` has been executed by \`$GITHUB_EVENT_NAME\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
            ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
