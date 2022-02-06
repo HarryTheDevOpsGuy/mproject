@@ -68,6 +68,6 @@ jobs:
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
            [[ -f "${ANSIBLE_INVENTORY}" ]] || export ANSIBLE_INVENTORY="/etc/ansible/hosts"
-           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
+           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            ansible-playbook -CD -u harry -e "target_host=${TARGET_HOST} project_name=${{ github.event.inputs.project_name }}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            hostname
