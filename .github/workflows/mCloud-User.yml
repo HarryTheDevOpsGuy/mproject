@@ -1,0 +1,80 @@
+
+name: mCloud Users
+on:
+#   schedule:
+#     - cron:  '1 4 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: 'Your Project Name'
+        default: 'mcloud'
+      environment:
+        description: 'Project env'
+        default: 'dev'
+#       playbook:
+#         description: 'Enter Playbook name'
+#         default: 'lemp'
+      options:
+        description: 'Provide you ansible options'
+        default: '-t base,user_mgmt'
+
+jobs:
+  mUsers:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        #working-directory: /opt
+        shell: bash
+    env:
+     GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+     #ANSIBLE_HOST_KEY_CHECKING: False
+     ANSIBLE_CONFIG: "${GITHUB_WORKSPACE}/mcloud-ansible/inventory/ansible.cfg"
+     ANSIBLE_INVENTORY: "inventory/hosts_${{ github.event.inputs.project_name }}"
+     ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
+     ANSIBLE_WORKING_DIR: mcloud-users
+     ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
+     TARGET_HOST: ${{ github.event.inputs.project_name }}_${{ github.event.inputs.environment }}
+     #ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
+     ANSIBLE_PLAYBOOK: lemp.yml
+     ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
+     SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
+     SLACK_CHANNEL: '#devops'
+     ANSIBLE_LOG_FOLDER: ${GITHUB_WORKSPACE}/ansible
+
+
+    steps:
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Checkout ${{ env.ANSIBLE_WORKING_DIR }}
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: HarryTheDevOpsGuy/mCloud-Users
+          path: ${{ env.ANSIBLE_WORKING_DIR }}
+          ref: main
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: info
+        run: |
+          ansible --version
+          /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
+          sudo curl -sL https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
+          sudo chmod +x /usr/bin/mslack
+
+      - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
+        run: |
+          git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
+
+      - name: Run ansible playbook
+        working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
+        run: |
+           if [[ ! -f ${ANSIBLE_INVENTORY} ]]; then
+             export ANSIBLE_INVENTORY="/etc/ansible/hosts"
+             export TARGET_HOST="127.0.0.1"
+           fi
+           build_url=https://github.com/HarryTheDevOpsGuy/mproject/actions/runs/${{ github.run_id }}
+           mslack chat send --title "${GITHUB_RUN_NUMBER} - Started Pipeline -> <${build_url}|${GITHUB_JOB}> By ${{ github.actor }}" --text "*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
+           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
+           #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
+           ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
