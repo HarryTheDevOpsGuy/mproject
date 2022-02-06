@@ -16,7 +16,7 @@ on:
         default: 'lemp'
       options:
         description: 'Provide you ansible options'
-        default: '-t base -CD'
+        default: '-t base,user_mgmt -CD'
         
 jobs:
   mCloud-Infra:
@@ -53,7 +53,6 @@ jobs:
   
       - name: info 
         run: |
-          env 
           hostname
           hostname -I
           curl ifconfig.me
@@ -71,5 +70,5 @@ jobs:
         run: |
            [[ -f "${ANSIBLE_INVENTORY}" ]] || export ANSIBLE_INVENTORY="/etc/ansible/hosts"
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
-           ansible-playbook -CD -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
+           ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            hostname
