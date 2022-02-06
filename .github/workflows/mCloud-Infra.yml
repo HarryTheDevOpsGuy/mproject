@@ -54,7 +54,7 @@ jobs:
           df -h
           ansible --version
   
-      - name: mproject clone mcloud-infra
+      - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
@@ -66,7 +66,7 @@ jobs:
 #           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
           
       - name: Run ansible playbook
-        working-directory: ${ANSIBLE_WORKING_DIR}
+        working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
            pwd 
            ls -lR  
