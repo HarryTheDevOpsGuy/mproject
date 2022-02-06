@@ -1,16 +1,16 @@
 
 name: mCloud Users
 on:
-#   schedule:
-#     - cron:  '1 4 * * 1-5'
+  schedule:
+    - cron:  '1 */6 * * 1-5'
   workflow_dispatch:
     inputs:
       project_name:
         description: 'Your Project Name'
-        default: 'mcloud'
+        default: 'google'
       environment:
         description: 'Project env'
-        default: 'dev'
+        default: 'prod'
 #       playbook:
 #         description: 'Enter Playbook name'
 #         default: 'lemp'
