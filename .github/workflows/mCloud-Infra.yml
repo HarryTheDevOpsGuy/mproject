@@ -14,9 +14,9 @@ on:
       playbook:
         description: 'Enter Playbook name'
         default: 'lemp'
-      tags:
-        description: 'Enter your tag name'
-        default: 'base,create_users,openresty'
+      options:
+        description: 'Provide you ansible options'
+        default: '-t base -CD'
         
 jobs:
   mCloud-Infra:
@@ -29,7 +29,10 @@ jobs:
      GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
      ANSIBLE_HOSTS: "/etc/ansible/hosts"
      ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
-     ANSIBLE_WORKING_DIR: mcloud-infra  
+     ANSIBLE_WORKING_DIR: mcloud-infra
+     ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
+     TARGET_HOST: ${{ github.event.inputs.project_name }}_${{ github.event.inputs.environment }}
+     ANSIBLE_PLAYBOOK: lemp.yml
              
     steps:
       - uses: webfactory/ssh-agent@v0.5.3
@@ -58,19 +61,10 @@ jobs:
         run: |
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
-   
-  
-#       - name: mproject clone mcloud-ansible
-#         run: |
-#           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
-#           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
           
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
-        run: |
-           pwd 
-           ls -lR  
+        run: |   
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
-           #ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" local.yml
-           #ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" -t "${{ github.event.inputs.tags }}" ${{ github.event.inputs.playbook }}.yml
+           ansible-playbook -CD -e "target_host=${TARGET_HOST} project_name=${{ github.event.inputs.project_name }}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            hostname
