@@ -79,9 +79,9 @@ jobs:
              export ANSIBLE_INVENTORY="/etc/ansible/hosts"
              export TARGET_HOST="127.0.0.1"
            fi
-           WORKFLOW_URL=https://github.com/HarryTheDevOpsGuy/mproject/actions/workflows/${GITHUB_WORKFLOW}.yml
+           
            build_url=https://github.com/HarryTheDevOpsGuy/mproject/actions/runs/${{ github.run_id }}
-           mslack chat send --title "Executed Pipeline <${build_url}|${GITHUB_JOB}_${GITHUB_RUN_NUMBER}>" --text "*Build No :* \`$GITHUB_RUN_NUMBER\`\n*WorkFlow :* <${build_url}|${GITHUB_WORKFLOW}>\n*Job :*\`$GITHUB_JOB\`\n*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`\n*WORKFLOW_URL :* <${WORKFLOW_URL}|${GITHUB_WORKFLOW}>" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
+           mslack chat send --title "${GITHUB_RUN_NUMBER} - Pipeline -> <${build_url}|${GITHUB_JOB}>" --text "*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
            ansible-playbook -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
