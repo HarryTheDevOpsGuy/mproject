@@ -28,6 +28,7 @@ jobs:
     env:
      GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
      ANSIBLE_HOST_KEY_CHECKING: False
+     ANSIBLE_CONFIG: "${GITHUB_WORKSPACE}/mcloud-ansible/inventory/ansible.cfg"
      ANSIBLE_INVENTORY: "inventory/hosts_${{ github.event.inputs.project_name }}"
      ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
      ANSIBLE_WORKING_DIR: mcloud-infra/ansible
