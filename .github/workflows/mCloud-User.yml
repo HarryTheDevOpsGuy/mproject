@@ -67,9 +67,13 @@ jobs:
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
+
            if [[ ! -f ${ANSIBLE_INVENTORY} ]]; then
+             echo "${ANSIBLE_INVENTORY}"
              export ANSIBLE_INVENTORY="/etc/ansible/hosts"
              export TARGET_HOST="127.0.0.1"
+           else
+             echo "else --> ${ANSIBLE_INVENTORY}"
            fi
 
            build_url=https://github.com/HarryTheDevOpsGuy/mproject/actions/runs/${{ github.run_id }}
