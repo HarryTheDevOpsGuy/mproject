@@ -34,6 +34,7 @@ jobs:
      ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
      TARGET_HOST: ${{ github.event.inputs.project_name }}_${{ github.event.inputs.environment }}
      ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
+     ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
      
              
     steps:
@@ -69,5 +70,5 @@ jobs:
         run: |
            [[ -f "${ANSIBLE_INVENTORY}" ]] || export ANSIBLE_INVENTORY="/etc/ansible/hosts"
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
-           ansible-playbook -CD -u harry -e "target_host=${TARGET_HOST} project_name=${{ github.event.inputs.project_name }}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
+           ansible-playbook -CD -u harry -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            hostname
