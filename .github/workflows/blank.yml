@@ -1,0 +1,76 @@
+
+name: mCloud Infra
+on:
+#   schedule:
+#     - cron:  '1 4 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: 'Your Project Name'
+        default: 'mcloud'
+      environment:
+        description: 'Project env'
+        default: 'dev'
+      playbook:
+        description: 'Enter Playbook name'
+        default: 'lemp'
+      tags:
+        description: 'Enter your tag name'
+        default: 'base,create_users,openresty'
+        
+jobs:
+  mCloud-Ansible-Playground:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        #working-directory: /opt
+        shell: bash
+    env:
+     GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+     ANSIBLE_HOSTS: "/etc/ansible/hosts"
+     ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
+     ANSIBLE_WORKING_DIR: mcloud-infra  
+             
+    steps:
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+#       - name: Checkout ${ANSIBLE_WORKING_DIR} 
+#         uses: actions/checkout@v2.4.0
+#         with:
+#           repository: HarryTheDevOpsGuy/mCloud-Users
+#           path: mcloud-users
+#           ref: main
+#           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  
+      - name: info 
+        run: |
+          env 
+          hostname
+          hostname -I
+          curl ifconfig.me
+          free -h
+          df -h
+          ansible --version
+  
+      - name: mproject clone mcloud-infra
+        run: |
+          git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
+          git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
+   
+  
+#       - name: mproject clone mcloud-ansible
+#         run: |
+#           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
+#           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
+          
+      - name: Run ansible playbook
+        working-directory: ${ANSIBLE_WORKING_DIR}
+        run: |
+           pwd 
+           ls -lR  
+           ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
+           #ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" local.yml
+           #ansible-playbook -e "target_host=${{ github.event.inputs.target_host }} project_name=${{ github.event.inputs.project_name }}" -t "${{ github.event.inputs.tags }}" ${{ github.event.inputs.playbook }}.yml
+           hostname
