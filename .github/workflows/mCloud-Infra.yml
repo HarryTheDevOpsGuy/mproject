@@ -59,7 +59,6 @@ jobs:
           free -h
           df -h
           ansible --version
-          pip3 install prettytable
           /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable 
   
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
