@@ -27,7 +27,7 @@ jobs:
         shell: bash
     env:
      GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-     ANSIBLE_HOSTS: "inventory/hosts_${{ github.event.inputs.project_name }}"
+     ANSIBLE_INVENTORY: "inventory/hosts_${{ github.event.inputs.project_name }}"
      ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
      ANSIBLE_WORKING_DIR: mcloud-infra/ansible
      ANSIBLE_OPTIONS: ${{ github.event.inputs.options }}
@@ -65,7 +65,7 @@ jobs:
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
-           [[ -f "${ANSIBLE_HOSTS}" ]] || export ANSIBLE_HOSTS="/etc/ansible/hosts"
+           [[ -f "${ANSIBLE_INVENTORY}" ]] || export ANSIBLE_INVENTORY="/etc/ansible/hosts"
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/requirements.yml
            ansible-playbook -CD -e "target_host=${TARGET_HOST} project_name=${{ github.event.inputs.project_name }}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            hostname
