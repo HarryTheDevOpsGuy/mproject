@@ -116,7 +116,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Action Ref:* `${{ git.action_ref }}`"
+                      "text": "*Action Ref:* `${{ github.action_ref }}`"
                     }
                   ]
                 },
