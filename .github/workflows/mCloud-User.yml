@@ -39,8 +39,6 @@ jobs:
      ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
      SLACK_CLI_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
      SLACK_CHANNEL: '#devops'
-     ANSIBLE_LOG_FOLDER: ${GITHUB_WORKSPACE}/ansible
-
 
     steps:
       - uses: webfactory/ssh-agent@v0.5.3
@@ -73,8 +71,10 @@ jobs:
              export ANSIBLE_INVENTORY="/etc/ansible/hosts"
              export TARGET_HOST="127.0.0.1"
            fi
+
            build_url=https://github.com/HarryTheDevOpsGuy/mproject/actions/runs/${{ github.run_id }}
            mslack chat send --title "${GITHUB_RUN_NUMBER} - Started Pipeline -> <${build_url}|${GITHUB_JOB}> By ${{ github.actor }}" --text "*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
+           echo ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
            ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
