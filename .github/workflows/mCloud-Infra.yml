@@ -108,7 +108,15 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Commands:* `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
+                      "text": "*Playbook :* `${{ env.ANSIBLE_PLAYBOOK }}`"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Args :* `${{ env.ANSIBLE_OPTIONS }}`"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Action Ref:* `${{ git.action_ref }}`"
                     }
                   ]
                 },
