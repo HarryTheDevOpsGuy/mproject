@@ -84,7 +84,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Hi Harry,:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
+                    "text": "Hi Harry,\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
                   }
                 },
                 {
@@ -92,23 +92,23 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Workflow:*\n${{ github.workflow }}"
+                      "text": "*Workflow:* `${{ github.workflow }}`"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Build by:*\n${{ github.actor }}"
+                      "text": "*Build by:* `${{ github.actor }}`"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Build No:*\n${{ github.run_number }}"
+                      "text": "*Build No:* `${{ github.run_number }}`"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Environment :*\n${{ env.TARGET_HOST }}"
+                      "text": "*Environment :* `${{ env.TARGET_HOST }}`"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Commands:*\nansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}"
+                      "text": "*Commands:* `ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}`"
                     }
                   ]
                 },
