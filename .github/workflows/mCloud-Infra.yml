@@ -67,19 +67,18 @@ jobs:
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-infra.git ${GITHUB_WORKSPACE}/mcloud-infra
           git clone -b master git@bitbucket.org:devopsexpert/mcloud-ansible.git ${GITHUB_WORKSPACE}/mcloud-ansible
      
-      - name: Send message to Slack API
-        uses: archive/github-actions-slack@v2.0.0
-        id: notify
+      - name: Post to a Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.18.0
         with:
-          slack-bot-user-oauth-access-token: ${{ secrets.DEFAULT_SLACK_TOKEN }}
-          slack-channel: CUE4NTB0X
-          slack-optional-icon_emoji: ":fire:"
-          #slack-optional-as_user: false
-          slack-text: Hello! Event "${{ github.event_name }}" in "${{ github.repository }}" 🤓 \n ansible-playbook -u harry -e "target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}" "${{ env.ANSIBLE_OPTIONS }}" ${{ env.ANSIBLE_PLAYBOOK }}
-          
-      - name: Result from "Send Message"
-        run: echo "The result was ${{ steps.notify.outputs.slack-result }}"
-        
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          channel-id: 'CUE4NTB0X'
+          # For posting a simple plain text message
+          slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\n ansible-playbook -u harry -e 'target_host=${{ env.TARGET_HOST }} ${{ env.ANSIBLE_EXTRA_VARS }}' '${{ env.ANSIBLE_OPTIONS }}' ${{ env.ANSIBLE_PLAYBOOK }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.DEFAULT_SLACK_TOKEN }}
+
       - name: Run ansible playbook
         working-directory: ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
