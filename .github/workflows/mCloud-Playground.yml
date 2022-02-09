@@ -33,7 +33,7 @@ jobs:
      ANSIBLE_ROLES_PATH: ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/roles:~/.ansible/roles
      ANSIBLE_WORKING_DIR: mcloud-users
      ANSIBLE_OPTIONS: ${{ github.event.inputs.options || '-t base,user_mgmt' }}
-     TARGET_HOST: ${{ github.event.inputs.project_name  || 'mcloud' }}_${{ github.event.inputs.environment || 'prod' }}
+     TARGET_HOST: ${{ github.event.inputs.project_name  || 'local' }}_${{ github.event.inputs.environment || 'prod' }}
      #ANSIBLE_PLAYBOOK: ${{ github.event.inputs.playbook }}.yml
      ANSIBLE_PLAYBOOK: lemp.yml
      ANSIBLE_EXTRA_VARS: "project_environment=${{ github.event.inputs.project_name }} env_name=${{ github.event.inputs.environment }}"
