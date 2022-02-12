@@ -2,7 +2,7 @@
 name: mCloud Playground | mUser
 on:
   schedule:
-    - cron:  '*/3 * * * *'
+    - cron:  '3 */6 * * *'
   push:
     branches:
       - master
