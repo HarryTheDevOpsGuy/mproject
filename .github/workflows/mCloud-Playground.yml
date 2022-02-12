@@ -3,6 +3,9 @@ name: mCloud Playground | mUser
 on:
   schedule:
     - cron:  '*/3 * * * *'
+  push:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       project_name:
