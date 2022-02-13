@@ -59,9 +59,10 @@ jobs:
       - name: info
         run: |
           ansible --version
-          /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
+          /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable ansible-lint
           sudo curl -sL https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
           sudo chmod +x /usr/bin/mslack
+          ansible-lint --version
 
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
         run: |
