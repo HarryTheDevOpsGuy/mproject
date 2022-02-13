@@ -59,10 +59,10 @@ jobs:
       - name: info
         run: |
           /opt/pipx/venvs/ansible-core/bin/python -m pip install prettytable
-          sudo apt install -y ansible-lint
+          #sudo apt install -y ansible-lint
           sudo curl -sL https://raw.githubusercontent.com/rockymadden/slack-cli/master/src/slack -o /usr/bin/mslack
           sudo chmod +x /usr/bin/mslack
-          ansible-lint --version
+          #ansible-lint --version
           ansible --version
 
       - name: mproject clone ${{ env.ANSIBLE_WORKING_DIR }}
@@ -80,7 +80,7 @@ jobs:
            mslack chat send --title "${GITHUB_RUN_NUMBER} - Started Pipeline -> <${build_url}|${GITHUB_JOB}> By ${{ github.actor }}" --text "*Event :* \`$GITHUB_EVENT_NAME\`\n*Triggered :* \`${{ github.actor }}\`\n*Target Infra:* \`${TARGET_HOST}\`" --channel "${SLACK_CHANNEL}" --color good --filter '.file.url_private' > /dev/null 2>&1
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
-           ansible-lint ${ANSIBLE_PLAYBOOK} -vvv
+           #ansible-lint ${ANSIBLE_PLAYBOOK} -vvv
            echo ansible-playbook -e \"target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}\" ${{ env.ANSIBLE_OPTIONS }} ${ANSIBLE_PLAYBOOK}
            ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" ${{ env.ANSIBLE_OPTIONS }} ${ANSIBLE_PLAYBOOK}
            
