@@ -79,4 +79,4 @@ jobs:
            ansible-galaxy install -r ${GITHUB_WORKSPACE}/mcloud-ansible/playbook/ansible-pull-requirements.yml
            #ansible-playbook -e "target_host=127.0.0.1" lemp.yml -t 'pip_install_pkg' -vv
            echo ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
-           ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK} -CD
+           ansible-playbook -e "target_host=${TARGET_HOST} ${ANSIBLE_EXTRA_VARS}" "${{ env.ANSIBLE_OPTIONS }}" ${ANSIBLE_PLAYBOOK}
