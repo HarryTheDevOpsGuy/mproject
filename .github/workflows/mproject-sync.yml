@@ -39,7 +39,7 @@ jobs:
         #BUILD_COMMAND: '${{ github.event.inputs.command }}'
         BUILD_COMMAND: "mproject -e msend:${{ github.event.inputs.appname }} --sync --tags ${{ github.event.inputs.version }} -tVy"
         MPROJECT_DIR: '/tmp/mproject'
-        MPROJECT_BRANCH: 'auto-release'
+        MPROJECT_BRANCH: 'master'
 #         SENDGRID_API_KEY: ${{ secrets.DEFAULT_SENDGRID_TOKEN }}
 #         EMAIL_FROM: mcloudautomation@gmail.com
 #         EMAIL_MODE: SENDGRID
