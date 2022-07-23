@@ -66,9 +66,9 @@ jobs:
           cd ${MPROJECT_DIR}
           pwd
           if [ -z ${RELEASE_VERSION} ]; then
-            bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVy
+            bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync -tVyc
           elif [ ! -z ${RELEASE_VERSION} ]; then
-            bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags "${RELEASE_VERSION}" -tVy
+            bash ${MPROJECT_DIR}/mproject -e msend:${{ github.event.inputs.appname }} --sync --tags "${RELEASE_VERSION}" -tVyc
           else
             echo "Something went wrong"
           fi
